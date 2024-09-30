@@ -30,14 +30,13 @@ import com.spx.hummingbird.ui.theme.white3
 fun BottomCommentInput(
     commentCount: String, commentTapAction: () -> Unit,
     isCollected: Boolean, collectTapAction: () -> Unit,
-    shareTapAction: () -> Unit
+    shareTapAction: () -> Unit,
+    modifier: Modifier= Modifier
 ) {
-
     Row(
-        Modifier
+        modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .padding(bottom = 16.dp),
+            .padding(horizontal = 16.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.Center
     ) {
         Input()
@@ -47,7 +46,7 @@ fun BottomCommentInput(
             contentDescription = "Comment Icon",
             modifier = Modifier
                 .padding(start = 28.dp)
-                .size(36.dp)
+                .size(32.dp)
         )
 
         Image(
@@ -55,7 +54,7 @@ fun BottomCommentInput(
             contentDescription = "Bookmark Icon",
             modifier = Modifier
                 .padding(start = 32.dp)
-                .size(36.dp)
+                .size(32.dp)
         )
 
         Image(
@@ -63,7 +62,7 @@ fun BottomCommentInput(
             contentDescription = "Bookmark Icon",
             modifier = Modifier
                 .padding(start = 28.dp)
-                .size(36.dp)
+                .size(32.dp)
         )
     }
 }
@@ -73,8 +72,8 @@ fun Input() {
     Box(
         modifier = Modifier
             .width(160.dp)
-            .height(48.dp)
-            .clip(RoundedCornerShape(48.dp))
+            .height(32.dp)
+            .clip(RoundedCornerShape(32.dp))
             .background(white3),
     ) {
         Text(

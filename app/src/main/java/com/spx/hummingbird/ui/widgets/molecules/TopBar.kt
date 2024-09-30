@@ -34,9 +34,9 @@ fun TopBarWithBackButton(
     Surface(modifier = modifier) {
         TopAppBar(
             modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .height(40.dp)
-                .padding(bottom = 8.dp),
+                .padding(horizontal = 16.dp),
+//                .height(40.dp)
+//                .padding(bottom = 8.dp),
             title = {
                 Text(
                     text = "",
@@ -44,7 +44,7 @@ fun TopBarWithBackButton(
             },
             navigationIcon = {
                 IconButton(
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(24.dp),
                     onClick = { navController.navigateUp() }) {
                     Icon(
                         painter = painterResource(id = R.drawable.back),
@@ -53,11 +53,15 @@ fun TopBarWithBackButton(
                     )
                 }
             },
-            windowInsets = TopAppBarDefaults.windowInsets.only(
-                WindowInsetsSides.Horizontal
-            ),
+//            windowInsets = TopAppBarDefaults.windowInsets.only(
+//                WindowInsetsSides.Horizontal
+//            ),
             colors = TopAppBarDefaults.topAppBarColors()
-                .copy(containerColor = Color.Transparent),
+                .copy(
+                    containerColor = Color.Transparent,
+                    scrolledContainerColor = Color.Transparent,
+                    navigationIconContentColor = Color.Transparent
+                ),
         )
     }
 

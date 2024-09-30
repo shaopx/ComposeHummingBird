@@ -1,6 +1,7 @@
 package com.spx.hummingbird.modules.news.widgets.pages
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -50,67 +51,77 @@ fun VideoNewsDetail(docId: String) {
     }
 
     var topPadding: Dp by remember { mutableStateOf(0.dp) }
-    Scaffold(
-        topBar = {
-            TopBarWithBackButton(modifier = Modifier.padding(top = 60.dp), iconTintColor = Color.White)
-        },
-        bottomBar = {
-            BottomCommentInput(commentCount = (videoDetail?.videoInfo?.countComment ?: "0"),
-                commentTapAction = {
-
-                },
-                isCollected = videoDetail?.videoInfo?.isCollect == 1,
-                collectTapAction = {},
-                shareTapAction = {})
-        }
-    ) { paddingValues ->
+    Scaffold { paddingValues ->
         topPadding = paddingValues.calculateTopPadding()
         if (videoDetail == null) {
             Text("正在加载")
         } else {
             val videoInfo = videoDetail.videoInfo;
-            Column(
-                horizontalAlignment = Alignment.Start,
+            Box(
                 modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
             ) {
-                ExoPlayerView(videoInfo.videoUrl)
-                Text(
-                    "${videoInfo.title}",
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(
-                        horizontal = 16.dp,
-                        vertical = 8.dp
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                ) {
+                    ExoPlayerView(videoInfo.videoUrl)
+                    Text(
+                        "${videoInfo.title}",
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(
+                            horizontal = 16.dp,
+                            vertical = 8.dp
+                        )
                     )
-                )
-                Text(
-                    "${videoInfo.views}次浏览  编辑:${videoInfo.author}  ${videoInfo.dateline}",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Color.Gray,
-                    modifier = Modifier.padding(
-                        horizontal = 16.dp,
-                        vertical = 8.dp
+                    Text(
+                        "${videoInfo.views}次浏览  编辑:${videoInfo.author}  ${videoInfo.dateline}",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Color.Gray,
+                        modifier = Modifier.padding(
+                            horizontal = 16.dp,
+                            vertical = 8.dp
+                        )
                     )
-                )
-                HorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
-                    thickness = 0.5.dp
-                )
-                Spacer(Modifier.padding(bottom = 12.dp))
-                Text(
-                    "精选视频",
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-                LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
-                    items(videoDetail.recommendInfo.size) { index ->
-                        val recommendInfo = videoDetail.recommendInfo[index]!!
-                        VideoRecommendItem(item = recommendInfo)
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                        thickness = 0.5.dp
+                    )
+                    Spacer(Modifier.padding(bottom = 12.dp))
+                    Text(
+                        "精选视频",
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 60.dp)
+                    ) {
+                        items(videoDetail.recommendInfo.size) { index ->
+                            val recommendInfo =
+                                videoDetail.recommendInfo[index]!!
+                            VideoRecommendItem(item = recommendInfo)
+                        }
                     }
+//                Spacer(Modifier.weight(1f))
+
                 }
+                BottomCommentInput(
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    commentCount = (videoDetail?.videoInfo?.countComment
+                        ?: "0"),
+                    commentTapAction = {
+
+                    },
+                    isCollected = videoDetail?.videoInfo?.isCollect == 1,
+                    collectTapAction = {},
+                    shareTapAction = {},
+                )
             }
+
         }
     }
 }

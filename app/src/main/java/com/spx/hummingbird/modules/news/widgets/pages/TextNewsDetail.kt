@@ -8,26 +8,23 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.spx.hummingbird.modules.news.vm.NewsDetailViewModel
-import com.spx.hummingbird.modules.news.vm.VideoNewsDetailViewModel
 import com.spx.hummingbird.ui.widgets.molecules.BottomCommentInput
 import com.spx.hummingbird.ui.widgets.molecules.TopBarWithBackButton
 
@@ -46,28 +43,31 @@ fun TextNewsDetail(docId: String) {
         viewModel.fetchDetail()
     }
 
+    var bottomPaddingDp by remember { mutableStateOf(50.dp) }
     Scaffold(
-//        topBar = {
-//            TopBarWithBackButton(modifier = Modifier.padding(top = 0.dp))
-//        },
-        bottomBar = {
-            BottomCommentInput(commentCount = (docDetail?.commentCount ?: "0"),
-                commentTapAction = {
-
-                },
-                isCollected = docDetail?.isCollect == 1,
-                collectTapAction = {},
-                shareTapAction = {})
-        }
+        topBar = {
+            TopBarWithBackButton(modifier = Modifier.padding(top = 0.dp))
+        },
+//        bottomBar = {
+//            BottomCommentInput(commentCount = (docDetail?.commentCount ?: "0"),
+//                commentTapAction = {
+//
+//                },
+//                isCollected = docDetail?.isCollect == 1,
+//                collectTapAction = {},
+//                shareTapAction = {},
+////                modifier = Modifier.padding(bottom = bottomPaddingDp)
+//            )
+//        }
     ) { paddingValues ->
-        Column {
-            TopBarWithBackButton(modifier = Modifier.padding(top = paddingValues.calculateTopPadding()))
+        bottomPaddingDp = paddingValues.calculateBottomPadding()
+        println("shaopx debug calculateBottomPadding:${paddingValues.calculateBottomPadding()}")
+        println("shaopx debug calculateTopPadding:${paddingValues.calculateTopPadding()}")
+        Column(modifier =  Modifier.padding(paddingValues)) {
+//            TopBarWithBackButton(modifier = Modifier.padding(top = paddingValues.calculateTopPadding()))
             AndroidView(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(
-                        bottom = paddingValues.calculateBottomPadding(),
-                    ),
+                    .fillMaxWidth().weight(1f),
                 factory = {
                     WebView(context).apply {
                         settings.javaScriptEnabled = true
@@ -90,6 +90,15 @@ fun TextNewsDetail(docId: String) {
                         loadUrl("https://apis.fengniao.com/index.php?r=asy/document/docDetail&docId=$docId&res=784*1701.8181818181818&pkg=com.fengniao.fengniaosheying&project=fnSmallProgram")
                     }
                 }
+            )
+            BottomCommentInput(commentCount = (docDetail?.commentCount ?: "0"),
+                commentTapAction = {
+
+                },
+                isCollected = docDetail?.isCollect == 1,
+                collectTapAction = {},
+                shareTapAction = {},
+//                modifier = Modifier.padding(bottom = bottomPaddingDp)
             )
         }
 
